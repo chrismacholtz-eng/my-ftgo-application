@@ -5,7 +5,6 @@ import net.chrisrichardson.ftgo.accountservice.api.AuthorizeCommand;
 import net.chrisrichardson.ftgo.common.CommonJsonMapperInitializer;
 import net.chrisrichardson.ftgo.consumerservice.api.ConsumerServiceChannels;
 import net.chrisrichardson.ftgo.consumerservice.api.ValidateOrderByConsumer;
-import net.chrisrichardson.ftgo.kitchenservice.api.CancelCreateTicket;
 import net.chrisrichardson.ftgo.kitchenservice.api.ConfirmCreateTicket;
 import net.chrisrichardson.ftgo.kitchenservice.api.CreateTicket;
 import net.chrisrichardson.ftgo.kitchenservice.api.KitchenServiceChannels;
@@ -106,11 +105,6 @@ public class CreateOrderSagaTest {
       to(AccountingServiceChannels.accountingServiceChannel).
     andGiven().
       failureReply().
-    expect().
-      command(new CancelCreateTicket(ORDER_ID)).
-      to(KitchenServiceChannels.COMMAND_CHANNEL).
-    andGiven().
-      successReply().
     expect().
       command(new RejectOrderCommand(ORDER_ID)).
       to(OrderServiceChannels.COMMAND_CHANNEL)
