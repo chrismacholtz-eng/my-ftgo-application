@@ -5,6 +5,7 @@ import net.chrisrichardson.ftgo.common.RevisedOrderLineItem;
 import net.chrisrichardson.ftgo.orderservice.OrderDetailsMother;
 import net.chrisrichardson.ftgo.orderservice.RestaurantMother;
 import net.chrisrichardson.ftgo.orderservice.api.events.OrderAuthorized;
+import net.chrisrichardson.ftgo.orderservice.api.events.OrderCancelled;
 import net.chrisrichardson.ftgo.orderservice.api.events.OrderCreatedEvent;
 import net.chrisrichardson.ftgo.orderservice.api.events.OrderDomainEvent;
 import net.chrisrichardson.ftgo.orderservice.api.events.OrderState;
@@ -66,5 +67,20 @@ public class OrderTest {
     order.confirmRevision(orderRevision);
 
     assertEquals(CHICKEN_VINDALOO_PRICE.multiply(10), order.getOrderTotal());
+  }
+
+  @Test
+  public void shouldCancelOrder() {
+    order.noteApproved();
+    assertEquals(OrderState.APPROVED, order.getState());
+
+    List<OrderDomainEvent> cancelEvents = order.cancel();
+    assertEquals(Collections.emptyList(), cancelEvents);
+    assertEquals(OrderState.CANCEL_PENDING, order.getState());
+
+    List<OrderDomainEvent> noteCancelledEvents = order.noteCancelled();
+    assertEquals(1, noteCancelledEvents.size());
+    assertEquals(OrderCancelled.class, noteCancelledEvents.get(0).getClass());
+    assertEquals(OrderState.CANCELLED, order.getState());
   }
 }
