@@ -1,6 +1,7 @@
 package net.chrisrichardson.ftgo.orderservice.domain;
 
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
+import net.chrisrichardson.ftgo.common.Money;
 import net.chrisrichardson.ftgo.common.RevisedOrderLineItem;
 import net.chrisrichardson.ftgo.orderservice.OrderDetailsMother;
 import net.chrisrichardson.ftgo.orderservice.RestaurantMother;
@@ -42,7 +43,7 @@ public class OrderTest {
 
   @Test
   public void shouldCalculateTotal() {
-    assertEquals(CHICKEN_VINDALOO_PRICE.multiply(CHICKEN_VINDALOO_QUANTITY), order.getOrderTotal());
+    assertEquals(CHICKEN_VINDALOO_ORDER_TOTAL, order.getOrderTotal());
   }
 
   @Test
@@ -61,10 +62,11 @@ public class OrderTest {
 
     ResultWithDomainEvents<LineItemQuantityChange, OrderDomainEvent> result = order.revise(orderRevision);
 
-    assertEquals(CHICKEN_VINDALOO_PRICE.multiply(10), result.result.getNewOrderTotal());
+    assertEquals(CHICKEN_VINDALOO_ORDER_TOTAL.add(CHICKEN_VINDALOO_PRICE.multiply(5)), result.result.getNewOrderTotal());
 
     order.confirmRevision(orderRevision);
 
-    assertEquals(CHICKEN_VINDALOO_PRICE.multiply(10), order.getOrderTotal());
+    Money revisedSubtotal = CHICKEN_VINDALOO_PRICE.multiply(10);
+    assertEquals(revisedSubtotal.subtract(revisedSubtotal.percentageOf(20)), order.getOrderTotal());
   }
 }

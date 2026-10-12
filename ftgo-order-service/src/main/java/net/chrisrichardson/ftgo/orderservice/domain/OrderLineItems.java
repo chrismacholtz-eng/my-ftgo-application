@@ -14,6 +14,8 @@ import java.util.Optional;
 @Embeddable
 public class OrderLineItems {
 
+  private static final int PROMOTIONAL_DISCOUNT_PERCENT = 20;
+
   @ElementCollection
   @CollectionTable(name = "order_line_items")
   private List<OrderLineItem> lineItems;
@@ -63,7 +65,12 @@ public class OrderLineItems {
   }
 
   Money orderTotal() {
-    return lineItems.stream().map(OrderLineItem::getTotal).reduce(Money.ZERO, Money::add);
+    Money subtotal = lineItems.stream().map(OrderLineItem::getTotal).reduce(Money.ZERO, Money::add);
+    return applyPromotionalDiscount(subtotal);
+  }
+
+  private Money applyPromotionalDiscount(Money subtotal) {
+    return subtotal.subtract(subtotal.percentageOf(PROMOTIONAL_DISCOUNT_PERCENT));
   }
 
   LineItemQuantityChange lineItemQuantityChange(OrderRevision orderRevision) {

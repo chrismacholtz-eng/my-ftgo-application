@@ -61,6 +61,14 @@ public class Money {
     return new Money(amount.add(delta.amount));
   }
 
+  public Money subtract(Money delta) {
+    return new Money(amount.subtract(delta.amount));
+  }
+
+  public Money percentageOf(int percent) {
+    return new Money(amount.multiply(new BigDecimal(percent)).divide(new BigDecimal(100)));
+  }
+
   public boolean isGreaterThanOrEqual(Money other) {
     return amount.compareTo(other.amount) >= 0;
   }

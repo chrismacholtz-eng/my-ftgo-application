@@ -32,7 +32,8 @@ public class OrderDetailsMother {
             CHICKEN_VINDALOO_MENU_ITEM_AND_QUANTITY.getQuantity()));
   }
 
-  public static final Money CHICKEN_VINDALOO_ORDER_TOTAL = CHICKEN_VINDALOO_PRICE.multiply(5);
+  public static final Money CHICKEN_VINDALOO_SUBTOTAL = CHICKEN_VINDALOO_PRICE.multiply(5);
+  public static final Money CHICKEN_VINDALOO_ORDER_TOTAL = CHICKEN_VINDALOO_SUBTOTAL.subtract(CHICKEN_VINDALOO_SUBTOTAL.percentageOf(20));
   public static final OrderDetails CHICKEN_VINDALOO_ORDER_DETAILS = new OrderDetails(CONSUMER_ID, AJANTA_ID,
           chickenVindalooLineItems(), CHICKEN_VINDALOO_ORDER_TOTAL);
 
