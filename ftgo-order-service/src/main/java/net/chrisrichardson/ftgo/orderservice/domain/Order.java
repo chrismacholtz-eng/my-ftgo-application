@@ -36,7 +36,6 @@ public class Order {
   @GeneratedValue
   private Long id;
 
-  @Version
   private Long version;
 
   @Enumerated(EnumType.STRING)
