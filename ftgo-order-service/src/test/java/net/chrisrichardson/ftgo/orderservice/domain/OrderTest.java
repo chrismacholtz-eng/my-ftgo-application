@@ -7,6 +7,7 @@ import net.chrisrichardson.ftgo.orderservice.RestaurantMother;
 import net.chrisrichardson.ftgo.orderservice.api.events.OrderAuthorized;
 import net.chrisrichardson.ftgo.orderservice.api.events.OrderCreatedEvent;
 import net.chrisrichardson.ftgo.orderservice.api.events.OrderDomainEvent;
+import net.chrisrichardson.ftgo.orderservice.api.events.OrderRejected;
 import net.chrisrichardson.ftgo.orderservice.api.events.OrderState;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,6 +51,14 @@ public class OrderTest {
     List<OrderDomainEvent> events = order.noteApproved();
     assertEquals(singletonList(new OrderAuthorized()), events);
     assertEquals(OrderState.APPROVED, order.getState());
+  }
+
+  @Test
+  public void shouldRejectOrder() {
+    List<OrderDomainEvent> events = order.noteRejected();
+    assertEquals(1, events.size());
+    assertEquals(OrderRejected.class, events.get(0).getClass());
+    assertEquals(OrderState.REJECTED, order.getState());
   }
 
   @Test
