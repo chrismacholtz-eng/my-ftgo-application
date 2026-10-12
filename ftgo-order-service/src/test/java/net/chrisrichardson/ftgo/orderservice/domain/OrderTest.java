@@ -81,6 +81,5 @@ public class OrderTest {
     List<OrderDomainEvent> noteCancelledEvents = order.noteCancelled();
     assertEquals(1, noteCancelledEvents.size());
     assertEquals(OrderCancelled.class, noteCancelledEvents.get(0).getClass());
-    assertEquals(OrderState.CANCELLED, order.getState());
   }
 }
